@@ -26,9 +26,9 @@ export class ERC20 {
     this.erc20Abi = ERC20Abi;
 
     this.info = {
-      name: undefined,
-      symbol: undefined, 
-      totalSupply: undefined,
+      name:         undefined,
+      symbol:       undefined,
+      totalSupply:  undefined,
     }
 
     
@@ -54,15 +54,15 @@ export class ERC20 {
     return this.token.methods.balanceOf(user).call();
   }
 
-  getName = () => {
+  getName = () : (string | undefined) => {
     return this.info.name;
   }
   
-  getSymbol = () => {
+  getSymbol = (): (string | undefined) => {
     return this.info.symbol;
   }
   
-  getTotalSupply = () => {
+  getTotalSupply = (): (number | undefined) => {
     return this.info.totalSupply;
   }
 }

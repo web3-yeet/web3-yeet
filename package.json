@@ -4,6 +4,7 @@
   "description": "Web3 Wrapper for Common Patterns",
   "main": "./lib/index.js",
   "scripts": {
+    "type-check": "tsc",
     "build": "babel src -d lib --delete-dir-on-start --extensions '.ts' && yarn run build-js",
     "build-js": "babel src -d lib --presets=@babel/preset-env",
     "babel": "babel"
@@ -25,6 +26,7 @@
     "@babel/plugin-syntax-class-properties": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/plugin-transform-typescript": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-typescript": "^7.1.0",
     "@types/web3": "^1.0.14",
