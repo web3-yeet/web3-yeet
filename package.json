@@ -17,6 +17,7 @@
   "author": "Cehhiro",
   "license": "ISC",
   "dependencies": {
+    "web3": "^1.0.0-beta.37",
     "web3-eth-contract": "^1.0.0-beta.37"
   },
   "devDependencies": {

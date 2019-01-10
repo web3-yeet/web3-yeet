@@ -3,10 +3,11 @@
  *
  */
 
-import Web3EthContract from 'web3-eth-contract';
+import Web3 from 'web3';
+import Contract from 'web3/eth/contract';
 import ERC20Abi from './abi/erc20Abi.js';
 
-Web3EthContract.setProvider('https://mainnet.infura.io/metamask');
+const web3 = new Web3('https://mainnet.infura.io/metamask');
 
 interface IInfo {
   name:         string | undefined;
@@ -16,7 +17,7 @@ interface IInfo {
 
 export class ERC20 {
   address:  string | undefined;
-  token:    any;
+  token:    Contract | undefined;
   info:     IInfo;
   erc20Abi: any;
 
@@ -34,7 +35,7 @@ export class ERC20 {
     
     if((/(0x)?([0-9a-f]{40})/gmi).test(address)){
       this.address = address;
-      this.token = new Web3EthContract(this.erc20Abi, address);
+      this.token = new web3.eth.Contract(this.erc20Abi, address);
 
       this.token.methods.name().call()
         .then((name: string) => this.info.name = name)
@@ -50,8 +51,8 @@ export class ERC20 {
     }
   }
 
-  getBalance = (user: string) => {
-    return this.token.methods.balanceOf(user).call();
+  getBalance = (user: string): (Promise<any> | undefined) => {
+    return this.token ? this.token.methods.balanceOf(user).call() : undefined;
   }
 
   getName = () : (string | undefined) => {
