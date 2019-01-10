@@ -5,7 +5,9 @@
 
 import Web3 from 'web3';
 import Contract from 'web3/eth/contract';
-import ERC20Abi from './abi/erc20Abi.js';
+import { ABIDefinition } from "web3/eth/abi";
+
+import { ERC20Abi } from './abi/erc20Abi';
 
 const web3 = new Web3('https://mainnet.infura.io/metamask');
 
@@ -19,7 +21,7 @@ export class ERC20 {
   address:  string | undefined;
   token:    Contract | undefined;
   info:     IInfo;
-  erc20Abi: any;
+  erc20Abi: ABIDefinition[];
 
   constructor(address: string) {
     this.address  = undefined;

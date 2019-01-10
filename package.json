@@ -5,8 +5,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "type-check": "tsc",
-    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts' && yarn run build-js",
-    "build-js": "babel src -d lib --presets=@babel/preset-env",
+    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts'",
     "babel": "babel"
   },
   "keywords": [
