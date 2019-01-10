@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "type-check": "tsc",
-    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts'",
+    "build": "babel src -d build --delete-dir-on-start --extensions '.ts'",
     "babel": "babel"
   },
   "keywords": [
