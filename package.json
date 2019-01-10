@@ -1,0 +1,35 @@
+{
+  "name": "web3-yeet",
+  "version": "0.1.0",
+  "description": "Web3 Wrapper for Common Patterns",
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts' && yarn run build-js",
+    "build-js": "babel src -d lib --presets=@babel/preset-env",
+    "babel": "babel"
+  },
+  "keywords": [
+    "web3",
+    "erc20",
+    "eth"
+  ],
+  "author": "Cehhiro",
+  "license": "ISC",
+  "dependencies": {
+    "web3-eth-contract": "^1.0.0-beta.37"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-syntax-class-properties": "^7.2.0",
+    "@babel/plugin-transform-arrow-functions": "^7.2.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/web3": "^1.0.14",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-plugin-inline-json-import": "^0.3.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2"
+  }
+}
