@@ -3,8 +3,8 @@
  *
  */
 
-import Web3 from 'web3';
-import Contract from 'web3/eth/contract';
+import Web3              from 'web3';
+import Contract          from 'web3/eth/contract';
 import { ABIDefinition } from "web3/eth/abi";
 
 import { ERC20Abi } from './abi/erc20Abi';
@@ -37,7 +37,7 @@ export class ERC20 {
     
     if((/(0x)?([0-9a-f]{40})/gmi).test(address)){
       this.address = address;
-      this.token = new web3.eth.Contract(this.erc20Abi, address);
+      this.token   = new web3.eth.Contract(this.erc20Abi, address);
 
       this.token.methods.name().call()
         .then((name: string) => this.info.name = name)
@@ -55,6 +55,10 @@ export class ERC20 {
 
   getBalance = (user: string): (Promise<any> | undefined) => {
     return this.token ? this.token.methods.balanceOf(user).call() : undefined;
+  }
+
+  getInfo = () : IInfo => {
+    return this.info;
   }
 
   getName = () : (string | undefined) => {
