@@ -16,6 +16,7 @@
   "author": "Cehhiro",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime-corejs2": "^7.2.0",
     "@types/bn.js": "^4.11.3",
     "web3": "^1.0.0-beta.37",
     "web3-eth-contract": "^1.0.0-beta.37"
@@ -27,6 +28,7 @@
     "@babel/plugin-syntax-class-properties": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/plugin-transform-typescript": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-typescript": "^7.1.0",
