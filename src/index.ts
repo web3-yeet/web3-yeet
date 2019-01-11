@@ -38,7 +38,7 @@ export class ERC20 {
       decimals:     undefined,
     }
 
-    
+
     if((/(0x)?([0-9a-f]{40})/gmi).test(address)){
       this.address = address;
       this.token   = new web3.eth.Contract(this.erc20Abi, address);
@@ -47,47 +47,59 @@ export class ERC20 {
       this.info.symbol      = this.token.methods.symbol().call();
       this.info.totalSupply = this.token.methods.totalSupply().call();
       this.info.decimals    = this.token.methods.decimals().call();
-      
+
       this.info.decimals.then((decimals: number) => {
         this.decimalFactor = web3.utils.toBN('1' + '0'.repeat(decimals));
       })
     }
   }
 
-  getBalance = (user: string): (Promise<any> | undefined) => {
-    if(this.token !== undefined) {
-      return new Promise((resolve, reject) => {
+  getBalance = (user: string): Promise<(string | undefined)> => {
+    return new Promise((resolve, reject) => {
+      if(this.token === undefined) {
+        resolve(undefined);
+      } else {
         this.token.methods.balanceOf(user).call()
-          .then((balance: string) => {
-            const b = web3.utils.toBN(balance);
-            const w = b.div(this.decimalFactor);
-            const f = b.mod(this.decimalFactor);
-            
-            resolve(`${w}.${f}`);
+          .then(async (balance: string) => {
+            const b      = web3.utils.toBN(balance);
+            const factor = await this.getDecimalFactor();
+
+            if(factor === undefined) {
+              resolve(undefined);
+            } else {
+              const w = b.div(factor);
+              const f = b.mod(factor);
+
+              resolve(`${w}.${f}`);
+            }
           })
           .catch((e: Error) => reject(e));
-      })
-    } else {
-      return undefined;
-    }
+      }
+    })
   }
+
 
   getInfo = () : IInfo => {
     return this.info;
   }
 
-  getName = () : (Promise<string> | undefined) => {
+  getDecimalFactor = async (): Promise<(BN | undefined)> => {
+    const decimals = await this.info.decimals
+    return decimals !== undefined ? web3.utils.toBN('1' + '0'.repeat(decimals)) : undefined;
+  }
+
+  getName = (): (Promise<string> | undefined) => {
     return this.info.name;
   }
-  
+
   getSymbol = (): (Promise<string> | undefined) => {
     return this.info.symbol;
   }
-  
+
   getTotalSupply = (): (Promise<number> | undefined) => {
     return this.info.totalSupply;
   }
-  
+
   getDecimals = (): (Promise<number> | undefined) => {
     return this.info.decimals;
   }
