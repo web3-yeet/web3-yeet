@@ -68,7 +68,7 @@ export class Wallet {
       if(typeof sender !== 'string')
         reject("There is no wallet access.");
 
-      if(typeof decimalFactor !== 'BN')
+      if(!web3.utils.isBN(decimalFactor))
         reject("Could not get token data.");
 
       const wallet = sender as string;
