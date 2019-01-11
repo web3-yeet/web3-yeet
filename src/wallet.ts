@@ -37,7 +37,7 @@ export class Wallet {
       
       const wei = web3.utils.toWei(web3.utils.toBN(amount), 'ether');
 
-      if(typeof wallet === 'string') reject("There is no wallet access.");
+      if(typeof wallet !== 'string') reject("There is no wallet access.");
 
       web3.eth.sendTransaction({
         from:   wallet,
