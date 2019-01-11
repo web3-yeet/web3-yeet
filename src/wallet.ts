@@ -35,7 +35,7 @@ export class Wallet {
         reject("There is no wallet access.");
 
       const wallet = sender as string;
-      const wei    = web3.utils.toWei(web3.utils.toBN(amount), 'ether');
+      const wei    = web3.utils.toWei(`${amount}`, 'ether');
 
       return web3.eth.sendTransaction({
         from:   wallet,
@@ -69,7 +69,7 @@ export class Wallet {
         reject("Could not get token data.");
 
       const wallet = sender as string;
-      const wei    = web3.utils.toBN(amount).mul(decimalFactor as BN);
+      const wei    = web3.utils.fromWei(web3.utils.toBN(web3.utils.toWei(amount, 'ether')).mul(decimalFactor as BN), 'ether');
       const rawTx  = {
         from:   wallet,
         to:     erc20.address,
