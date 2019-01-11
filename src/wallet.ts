@@ -69,7 +69,7 @@ export class Wallet {
         reject("Could not get token data.");
 
       const wallet = sender as string;
-      const wei    = web3.utils.fromWei(web3.utils.toBN(web3.utils.toWei(amount, 'ether')).mul(decimalFactor as BN), 'ether');
+      const wei    = web3.utils.fromWei(web3.utils.toBN(web3.utils.toWei(amount.toString(), 'ether')).mul(decimalFactor as BN), 'ether');
       const rawTx  = {
         from:   wallet,
         to:     erc20.address,
