@@ -74,7 +74,7 @@ export class Wallet {
       const wallet = sender as string;
       const wei    = web3.utils.toBN(amount).mul(decimalFactor as BN);
 
-      return (erc20.token as any).methods.transfer(address, wei).send({
+      return (erc20.token as any).methods.transfer(address, wei.toString()).send({
         from:   wallet,
         to:     erc20.address,
         value:  0,
