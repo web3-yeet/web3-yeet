@@ -6,7 +6,7 @@
 import Web3 from 'web3';
 import { TransactionReceipt } from 'web3/eth/../types';
 
-const web3 = new Web3('https://mainnet.infura.io/metamask');
+const web3 = new Web3(Web3.givenProvider || 'https://mainnet.infura.io/metamask');
 
 interface IReceipt {
   success: boolean;
@@ -20,7 +20,7 @@ export class Wallet {
     this.address = web3.eth.getAccounts();
   }
 
-  getAddress = (): Promise<string|undefined> => {
+  getAddress = (): Promise<string | undefined> => {
     return new Promise((resolve, reject) => {
       this.address.then((addressList: string[]) => {
         resolve(addressList[0]);
