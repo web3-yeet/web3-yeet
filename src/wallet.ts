@@ -73,12 +73,14 @@ export class Wallet {
 
       const wallet = sender as string;
       const wei    = web3.utils.toBN(amount).mul(decimalFactor as BN);
+      const rawTx  = {
+        from: wallet,
+        to: erc20.address,
+        value: "0",
+        data: (erc20.token as any).methods.transfer(address, wei.toString()).encodeABI()
+      };
 
-      return (erc20.token as any).methods.transfer(address, wei.toString()).send({
-        from:   wallet,
-        to:     erc20.address,
-        value:  0,
-      })
+      return web3.eth.sendTransaction(rawTx)
         .on('receipt', (receipt: TransactionReceipt) => {
           resolve({
             success: receipt.status,
