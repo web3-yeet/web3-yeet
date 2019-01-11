@@ -19,17 +19,15 @@ interface IInfo {
 }
 
 export class ERC20 {
-  address:        string | undefined;
-  token:          Contract | undefined;
-  info:           IInfo;
-  erc20Abi:       ABIDefinition[];
-  decimalFactor:  BN;
+  address:   string | undefined;
+  token:     Contract | undefined;
+  info:      IInfo;
+  erc20Abi:  ABIDefinition[];
 
   constructor(address: string) {
-    this.address       = undefined;
-    this.token         = undefined;
-    this.erc20Abi      = ERC20Abi;
-    this.decimalFactor = web3.utils.toBN('1');
+    this.address  = undefined;
+    this.token    = undefined;
+    this.erc20Abi = ERC20Abi;
 
     this.info = {
       name:         undefined,
@@ -47,10 +45,6 @@ export class ERC20 {
       this.info.symbol      = this.token.methods.symbol().call();
       this.info.totalSupply = this.token.methods.totalSupply().call();
       this.info.decimals    = this.token.methods.decimals().call();
-
-      this.info.decimals.then((decimals: number) => {
-        this.decimalFactor = web3.utils.toBN('1' + '0'.repeat(decimals));
-      })
     }
   }
 
