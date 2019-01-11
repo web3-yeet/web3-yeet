@@ -1,6 +1,6 @@
 {
   "name": "web3-yeet",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Web3 Wrapper for Common Patterns",
   "main": "./lib/index.js",
   "scripts": {
