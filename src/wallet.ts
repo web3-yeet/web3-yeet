@@ -62,7 +62,7 @@ export class Wallet {
     const decimalFactor = await erc20.getDecimalFactor();
 
     return new Promise((resolve, reject) => {
-      if(erc20.token === undefined)
+      if(typeof erc20.token === 'undefined')
         reject("Token instance couldn't be initialised");
 
       if(typeof sender !== 'string')
