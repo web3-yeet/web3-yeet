@@ -68,7 +68,7 @@ export class Wallet {
       if(typeof sender !== 'string')
         reject("There is no wallet access.");
 
-      if(!(decimalFactor instanceof BN))
+      if(typeof decimalFactor !== 'BN')
         reject("Could not get token data.");
 
       const wallet = sender as string;
