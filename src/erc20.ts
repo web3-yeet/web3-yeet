@@ -18,7 +18,7 @@ interface IInfo {
   decimals:     Promise<number> | undefined;
 }
 
-export default class ERC20 {
+export class ERC20 {
   address:        string | undefined;
   token:          Contract | undefined;
   info:           IInfo;

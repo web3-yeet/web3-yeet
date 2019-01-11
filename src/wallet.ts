@@ -13,7 +13,7 @@ interface IReceipt {
   txhash:  string;
 }
 
-export default class Wallet {
+export class Wallet {
   address: Promise<string[]>;
 
   constructor() {

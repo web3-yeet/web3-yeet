@@ -1,7 +1,2 @@
-import ERC20 from './erc20';
-import Wallet from './wallet';
-
-export default {
-  ERC20,
-  Wallet,
-}
+export { ERC20 } from './erc20';
+export { Wallet } from './wallet';
