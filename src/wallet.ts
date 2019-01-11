@@ -5,7 +5,6 @@
 
 import Web3                   from 'web3';
 import BN                     from 'bn.js';
-import Contract               from 'web3/eth/contract';
 import { ERC20 }              from './erc20';
 import { TransactionReceipt } from 'web3/eth/../types';
 
@@ -63,7 +62,7 @@ export class Wallet {
     const decimalFactor = await erc20.getDecimalFactor();
 
     return new Promise((resolve, reject) => {
-      if(!(erc20.token instanceof Contract))
+      if(erc20.token === undefined)
         reject("Token instance couldn't be initialised");
 
       if(typeof sender !== 'string')
@@ -75,7 +74,7 @@ export class Wallet {
       const wallet = sender as string;
       const wei    = web3.utils.toBN(amount).mul(decimalFactor as BN);
 
-      return (erc20.token as Contract).methods.transfer(address, wei).send({
+      return (erc20.token as any).methods.transfer(address, wei).send({
         from:   wallet,
         to:     erc20.address,
         value:  0,
