@@ -35,14 +35,14 @@ export class Wallet {
         else return undefined;
       })(await this.getAddress().catch((e: Error) => reject(e)));
       
-      const wei    = web3.utils.toWei(amount, 'ether');
+      const wei = web3.utils.toWei(web3.utils.toBN(amount), 'ether');
 
       if(typeof wallet === 'string') reject("There is no wallet access.");
 
       web3.eth.sendTransaction({
         from:   wallet,
         to:     address,
-        value:  wei,
+        value:  wei.toString(),
       })
         .on('receipt', (receipt: TransactionReceipt) => {
           resolve({
