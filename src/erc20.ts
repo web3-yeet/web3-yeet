@@ -48,28 +48,23 @@ export class ERC20 {
     }
   }
 
-  getBalance = (user: string): Promise<(string | undefined)> => {
-    return new Promise((resolve, reject) => {
-      if(this.token === undefined) {
-        resolve(undefined);
+  getBalance = async (user: string): Promise<string> => {
+    if(this.token === undefined) {
+      throw new ReferenceError("No token has been created");
+    } else {
+      const balance = await this.token.methods.balanceOf(user).call();
+      const factor  = await this.getDecimalFactor();
+      const b       = web3.utils.toBN(balance);
+
+      if(factor === undefined) {
+        throw new ReferenceError("Could not get decimal places");
       } else {
-        this.token.methods.balanceOf(user).call()
-          .then(async (balance: string) => {
-            const b      = web3.utils.toBN(balance);
-            const factor = await this.getDecimalFactor();
+        const w = b.div(factor);
+        const f = b.mod(factor);
 
-            if(factor === undefined) {
-              resolve(undefined);
-            } else {
-              const w = b.div(factor);
-              const f = b.mod(factor);
-
-              resolve(`${w}.${f}`);
-            }
-          })
-          .catch((e: Error) => { throw(e) });
+        return (`${w}.${f}`);
       }
-    })
+    }
   }
 
 

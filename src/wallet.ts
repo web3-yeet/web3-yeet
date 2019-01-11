@@ -22,12 +22,9 @@ export class Wallet {
     this.address = web3.eth.getAccounts();
   }
 
-  getAddress = (): Promise<string | undefined> => {
-    return new Promise((resolve, reject) => {
-      this.address.then((addressList: string[]) => {
-        resolve(addressList[0]);
-      });
-    });
+  getAddress = async (): Promise<string | undefined> => {
+    const addressList: string[] = await this.address;
+    return addressList[0];
   }
 
   sendEther = async (address: string, amount: number): Promise<IReceipt> => {
@@ -74,10 +71,10 @@ export class Wallet {
       const wallet = sender as string;
       const wei    = web3.utils.toBN(amount).mul(decimalFactor as BN);
       const rawTx  = {
-        from: wallet,
-        to: erc20.address,
-        value: "0",
-        data: (erc20.token as any).methods.transfer(address, wei.toString()).encodeABI()
+        from:   wallet,
+        to:     erc20.address,
+        value:  "0",
+        data:   (erc20.token as any).methods.transfer(address, wei.toString()).encodeABI()
       };
 
       return web3.eth.sendTransaction(rawTx)
