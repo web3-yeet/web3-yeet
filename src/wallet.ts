@@ -28,18 +28,20 @@ export class Wallet {
     });
   }
 
-  sendEther = (address: string, amount: number): Promise<IReceipt> => {
-    return new Promise(async (resolve, reject) => {
+  sendEther = async (address: string, amount: number): Promise<IReceipt> => {
+    const sender = await this.getAddress().catch((e: Error) => { throw(e) } );
+
+    return new Promise((resolve, reject) => {
       const wallet = ((wallet: (string | void)): (string | undefined) => {
         if(typeof wallet === 'string') return wallet;
         else return undefined;
-      })(await this.getAddress().catch((e: Error) => { throw(e) } ));
-      
+      })(sender);
+
       const wei = web3.utils.toWei(web3.utils.toBN(amount), 'ether');
 
-      if(typeof wallet !== 'string') throw ReferenceError("There is no wallet access.");
+      if(typeof wallet !== 'string') reject("There is no wallet access.");
 
-      web3.eth.sendTransaction({
+      return web3.eth.sendTransaction({
         from:   wallet,
         to:     address,
         value:  wei.toString(),
