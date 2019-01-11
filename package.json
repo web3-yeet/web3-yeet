@@ -16,6 +16,7 @@
   "author": "Cehhiro",
   "license": "ISC",
   "dependencies": {
+    "@types/bn.js": "^4.11.3",
     "web3": "^1.0.0-beta.37",
     "web3-eth-contract": "^1.0.0-beta.37"
   },
