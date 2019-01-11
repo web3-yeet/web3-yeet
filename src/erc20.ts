@@ -73,7 +73,7 @@ export class ERC20 {
               resolve(`${w}.${f}`);
             }
           })
-          .catch((e: Error) => reject(e));
+          .catch((e: Error) => { throw(e) });
       }
     })
   }
