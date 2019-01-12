@@ -53,7 +53,7 @@ export class ERC20 {
       throw new ReferenceError("No token has been created");
     } else {
       const balance = await this.token.methods.balanceOf(user).call();
-      const factor  = await this.getDecimalFactor();
+      const factor  = web3.utils.toBN(await this.getDecimalFactor());
       const b       = web3.utils.toBN(balance);
 
       if(factor === undefined) {
