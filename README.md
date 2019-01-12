@@ -68,7 +68,7 @@ if(isSigner) {
 ## Web3 Token-Based Authetication
 With `web3-yeet` it is easier to implement the modern WTBA, shown below.
 
-![web3 token based authentication](web3-yeet/docs/web3-token-based-auth.png)
+![web3 token based authentication](https://github.com/web3-yeet/web3-yeet/blob/master/docs/web3-token-based-auth.png)
 
 ## Meta
 
