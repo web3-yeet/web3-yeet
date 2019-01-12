@@ -56,11 +56,11 @@ export class Wallet {
     if(typeof sender !== 'string')
       Promise.reject("There is no wallet access.");
 
-    if(!web3.utils.isBN(decimalFactor))
+    if(typeof decimalFactor !== 'string')
       Promise.reject("Could not get token data.");
 
     const wallet = sender as string;
-    const wei    = web3.utils.fromWei(web3.utils.toBN(web3.utils.toWei(amount.toString(), 'ether')).mul(decimalFactor as BN), 'ether');
+    const wei    = web3.utils.fromWei(web3.utils.toBN(web3.utils.toWei(amount.toString(), 'ether')).mul(web3.utils.BN(decimalFactor)), 'ether');
 
     const rawTx: Tx = {
       from:   wallet,

@@ -72,9 +72,9 @@ export class ERC20 {
     return this.info;
   }
 
-  getDecimalFactor = async (): Promise<(BN | undefined)> => {
+  getDecimalFactor = async (): Promise<(string | undefined)> => {
     const decimals = await this.info.decimals
-    return decimals !== undefined ? web3.utils.toBN('1' + '0'.repeat(decimals)) : undefined;
+    return decimals !== undefined ? ('1' + '0'.repeat(decimals)) : undefined;
   }
 
   getName = (): (Promise<string> | undefined) => {
