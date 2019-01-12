@@ -1,6 +1,10 @@
 # Web3 YEET
 > Making web3 libraries usable
 
+[![npm version](https://badge.fury.io/js/web3-yeet.svg)](https://badge.fury.io/js/web3-yeet)
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+
+
 Web3js is a very powerful package, but as it stands, it is difficult to use. Web3 YEET wraps the most common operations used in web3 projects and makes them accessible in one line.
 
 ## Installation
@@ -63,7 +67,7 @@ if(isSigner) {
 
 ## Meta
 
-Your Name – [@Cehhiro](https://twitter.com/Cehhiro) – cehhiro@cehhiro.com
+Cehhiro – [@Cehhiro](https://twitter.com/Cehhiro) – cehhiro@cehhiro.com
 
 ## Contributing
 
