@@ -65,6 +65,11 @@ if(isSigner) {
     * Check BN type
 
 
+## Web3 Token-Based Authetication
+With `web3-yeet` it is easier to implement the modern WTBA, shown below.
+
+![web3 token based authentication](web3-yeet/docs/web3-token-based-auth.png)
+
 ## Meta
 
 Cehhiro – [@Cehhiro](https://twitter.com/Cehhiro) – cehhiro@cehhiro.com
