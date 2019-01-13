@@ -22,10 +22,19 @@ export class Wallet {
   constructor() {
     this.addressList = web3.eth.getAccounts();
   }
+  
+  isAvailable = async (): Promise<boolean> => {
+    const addressList: string[] = await this.addressList.catch((e: Error) => { throw(e) } );
+    return addressList !== undefined && addressList.length > 0; 
+  }
 
   getAddress = async (): Promise<string | undefined> => {
-    const addressList: string[] = await this.addressList.catch((e: Error) => { throw(e) } );
-    return addressList[0];
+    if(await this.isAvailable()) {
+      const addressList: string[] = await this.addressList.catch((e: Error) => { throw(e) } );
+      return addressList[0];
+    } else {
+      return undefined;
+    }
   }
 
   sendEther = async (address: string, amount: number): Promise<IReceipt> => {

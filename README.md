@@ -59,6 +59,8 @@ if(isSigner) {
 
 ## Release History
 
+* 0.3.16
+    * Add `Wallet.isAvailable()` 
 * 0.3.11
     * Add signatures
 * 0.3.10
