@@ -85,7 +85,7 @@ export class Wallet {
     const signer = await this.getAddress().catch((e: Error) => { throw(e) } );
 
     if(typeof signer !== 'string')
-      return Promise.reject("There is no wallet access.");
+      throw Error("There is no wallet access.");
 
     return (web3.eth.personal.sign(msg, signer as string) as any);
   }
