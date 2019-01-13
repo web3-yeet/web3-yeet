@@ -32,7 +32,7 @@ export class Wallet {
     const sender = await this.getAddress().catch((e: Error) => { throw(e) } );
 
     if(typeof sender !== 'string')
-      Promise.reject("There is no wallet access.");
+      throw Error("There is no wallet access.");
 
     const wallet = sender as string;
     const wei    = web3.utils.toWei(`${amount}`, 'ether');
@@ -51,13 +51,13 @@ export class Wallet {
     const decimalFactor = await erc20.getDecimalFactor().catch((e: Error) => { throw(e) } );
 
     if(typeof erc20.token === 'undefined')
-      Promise.reject("Token instance couldn't be initialised");
+      throw Error("Token instance couldn't be initialised");
 
     if(typeof sender !== 'string')
-      Promise.reject("There is no wallet access.");
+      throw Error("There is no wallet access.");
 
     if(typeof decimalFactor !== 'string')
-      Promise.reject("Could not get token data.");
+      throw Error("Could not get token data.");
 
     const wallet = sender as string;
     const wei    = web3.utils.fromWei(web3.utils.toBN(web3.utils.toWei(amount.toString(), 'ether')).mul(web3.utils.toBN(decimalFactor)).toString(), 'ether');
@@ -88,7 +88,7 @@ export class Wallet {
     const recovered = await (web3.eth.personal.ecRecover(msg, signature) as any).catch((e: Error) => { throw(e) } );
     
     if(typeof signer !== 'string')
-      Promise.reject("There is no wallet access.");
+      throw Error("There is no wallet access.");
  
 
     return (signer as string).toLowerCase() === recovered.toLowerCase();
