@@ -7,6 +7,31 @@
 
 Web3js is a very powerful package, but as it stands, it is difficult to use. Web3 YEET wraps the most common operations used in web3 projects and makes them accessible in one line.
 
+## Demo
+
+Check the functions at https://web3-yeet.github.io/.
+
+The buttons simply call:
+```js
+  sendCehh = () => {
+    this.wallet.sendERC20(this.bag, 20, this.token); 
+  }
+
+  sendEth = () => {
+    this.wallet.sendEther(this.bag, 0.024); /* Donations appreciated  */
+  }
+
+  sign = async () => {
+    const signature = await this.wallet.signMessage("this message");
+    this.setState({signature: signature})
+  }
+
+  check = async () => {
+    const isYou = await this.wallet.checkMessage("this message", this.state.signature);
+    this.setState({isYou: isYou});
+  }
+```
+
 ## Installation
 
 Yarn:
