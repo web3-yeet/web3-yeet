@@ -81,11 +81,12 @@ export class Wallet {
     return this.sendTransaction(rawTx);
   }
 
-  signMessage = async (msg: string): Promise<string> => {
+  signMessage = async (msg: string): Promise<string | undefined> => {
     const signer = await this.getAddress().catch((e: Error) => { throw(e) } );
 
-    if(typeof signer !== 'string')
+    if(typeof signer !== 'string') {
       throw Error("There is no wallet access.");
+    }
 
     return (web3.eth.personal.sign(msg, signer as string) as any);
   }
@@ -104,17 +105,19 @@ export class Wallet {
   }
 
   private sendTransaction = (rawTx: Tx): Promise<IReceipt> => {
+    const tx = web3.eth.sendTransaction(rawTx);
+
     return new Promise((resolve, reject) => {
-      web3.eth.sendTransaction(rawTx)
-        .on('receipt', (receipt: TransactionReceipt) => {
-          resolve({
-            success:  receipt.status,
-            txhash:   receipt.transactionHash
-          });
-        })
-        .on('error', (error: any) => {
-          throw(error);
+      tx.on('receipt', (receipt: TransactionReceipt) => {
+        resolve({
+          success:  receipt.status,
+          txhash:   receipt.transactionHash
         });
+      });
+
+      tx.on('error', (error: any) => {
+        throw Error(error);
+      });
     })
   }
 }
