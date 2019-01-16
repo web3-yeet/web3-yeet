@@ -3,10 +3,13 @@
   "version": "0.3.19",
   "description": "Web3 Wrapper for Common Patterns",
   "main": "./lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "type-check": "tsc",
-    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts'",
-    "babel": "babel"
+    "test": "mocha test",
+    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts'"
   },
   "keywords": [
     "web3",
@@ -36,6 +39,9 @@
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-inline-json-import": "^0.3.1",
     "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2"
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "chai": "^4.2.0",
+    "ganache-cli": "^6.2.5",
+    "mocha": "^5.2.0"
   }
 }

@@ -7,9 +7,8 @@ import Web3                   from 'web3';
 import BN                     from 'bn.js';
 import { ERC20 }              from './erc20';
 import { TransactionReceipt } from 'web3/eth/../types';
+import { Provider }           from 'web3/eth/../providers';
 import { Tx }                 from 'web3/eth/types';
-
-const web3 = new Web3(Web3.givenProvider || 'https://mainnet.infura.io/metamask');
 
 interface IReceipt {
   success: boolean;
@@ -18,9 +17,11 @@ interface IReceipt {
 
 export class Wallet {
   addressList: Promise<string[]>;
+  web3: Web3;
 
   constructor() {
-    this.addressList = web3.eth.getAccounts();
+    this.web3 = new Web3(Web3.givenProvider || 'https://mainnet.infura.io/metamask');
+    this.addressList = this.web3.eth.getAccounts();
   }
   
   isAvailable = async (): Promise<boolean> => {
@@ -28,6 +29,11 @@ export class Wallet {
     return addressList !== undefined && addressList.length > 0; 
   }
 
+  setProvider = (provider: Provider) => {
+    this.web3.setProvider(provider);
+    this.addressList = this.web3.eth.getAccounts();
+  }
+  
   getAddress = async (): Promise<string | undefined> => {
     if(await this.isAvailable()) {
       const addressList: string[] = await this.addressList.catch((e: Error) => { throw(e) } );
@@ -44,7 +50,7 @@ export class Wallet {
       throw Error("There is no wallet access.");
 
     const wallet = sender as string;
-    const wei    = web3.utils.toWei(`${amount}`, 'ether');
+    const wei    = this.web3.utils.toWei(`${amount}`, 'ether');
 
     const rawTx: Tx = {
       from:   wallet,
@@ -69,7 +75,7 @@ export class Wallet {
       throw Error("Could not get token data.");
 
     const wallet = sender as string;
-    const wei    = web3.utils.fromWei(web3.utils.toBN(web3.utils.toWei(amount.toString(), 'ether')).mul(web3.utils.toBN(decimalFactor)).toString(), 'ether');
+    const wei    = this.web3.utils.fromWei(this.web3.utils.toBN(this.web3.utils.toWei(amount.toString(), 'ether')).mul(this.web3.utils.toBN(decimalFactor)).toString(), 'ether');
 
     const rawTx: Tx = {
       from:   wallet,
@@ -88,14 +94,14 @@ export class Wallet {
       throw Error("There is no wallet access.");
     }
 
-    return (web3.eth.personal.sign(msg, signer as string) as any);
+    return (this.web3.eth.personal.sign(msg, signer as string) as any);
   }
   
   checkMessage = async (msg: string, signature: string): Promise<boolean> => {
     const signer    = await this.getAddress().catch((e: Error) => { throw(e) } );
 
       // web3.personal.ecRecover is not in @types
-    const recovered = await (web3.eth.personal.ecRecover(msg, signature) as any).catch((e: Error) => { throw(e) } );
+    const recovered = await (this.web3.eth.personal.ecRecover(msg, signature) as any).catch((e: Error) => { throw(e) } );
     
     if(typeof signer !== 'string')
       throw Error("There is no wallet access.");
@@ -105,7 +111,7 @@ export class Wallet {
   }
 
   private sendTransaction = (rawTx: Tx): Promise<IReceipt> => {
-    const tx = web3.eth.sendTransaction(rawTx);
+    const tx = this.web3.eth.sendTransaction(rawTx);
 
     return new Promise((resolve, reject) => {
       tx.on('receipt', (receipt: TransactionReceipt) => {

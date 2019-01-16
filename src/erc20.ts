@@ -25,10 +25,10 @@ export class ERC20 {
   erc20Abi:  ABIDefinition[];
 
   constructor(address: string) {
-    this.address  = undefined;
-    this.token    = undefined;
-    this.erc20Abi = ERC20Abi;
+    if(!web3.utils.isAddress(web3.utils.toChecksumAddress(address)))
+      throw new Error("Invalid Ethereum address provided");
 
+    this.erc20Abi = ERC20Abi;
     this.info = {
       name:         undefined,
       symbol:       undefined,
@@ -36,16 +36,13 @@ export class ERC20 {
       decimals:     undefined,
     }
 
+    this.address = address;
+    this.token   = new web3.eth.Contract(this.erc20Abi, address);
 
-    if((/(0x)?([0-9a-f]{40})/gmi).test(address)){
-      this.address = address;
-      this.token   = new web3.eth.Contract(this.erc20Abi, address);
-
-      this.info.name        = this.token.methods.name().call();
-      this.info.symbol      = this.token.methods.symbol().call();
-      this.info.totalSupply = this.token.methods.totalSupply().call();
-      this.info.decimals    = this.token.methods.decimals().call();
-    }
+    this.info.name        = this.token.methods.name().call();
+    this.info.symbol      = this.token.methods.symbol().call();
+    this.info.totalSupply = this.token.methods.totalSupply().call();
+    this.info.decimals    = this.token.methods.decimals().call();
   }
 
   getBalance = async (user: string): Promise<string> => {

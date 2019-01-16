@@ -84,6 +84,8 @@ if(isSigner) {
 
 ## Release History
 
+* 0.3.19
+    * Add tests 
 * 0.3.18
     * Add error return for `Wallet.sign()` 
 * 0.3.16
