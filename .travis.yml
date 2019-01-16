@@ -1,8 +1,7 @@
 language: node_js
 node_js:
 - stable
-- '6'
-- '4'
+- 8
 deploy:
   provider: npm
   email: ofonsk@gmail.com
