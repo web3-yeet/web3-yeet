@@ -1,6 +1,7 @@
 # Web3 YEET
 > Making web3 libraries usable
 
+[![Build Status](https://travis-ci.com/web3-yeet/web3-yeet.svg?branch=devel)](https://travis-ci.com/web3-yeet/web3-yeet)
 [![npm version](https://badge.fury.io/js/web3-yeet.svg)](https://badge.fury.io/js/web3-yeet)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Donate with Ethereum](https://en.cryptobadges.io/badge/small/0xff91c94f45e1114b1c90be6d028381964030584c)](https://en.cryptobadges.io/donate/0xff91c94f45e1114b1c90be6d028381964030584c)
