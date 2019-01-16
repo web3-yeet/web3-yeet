@@ -29,8 +29,16 @@ export class Wallet {
     return addressList !== undefined && addressList.length > 0; 
   }
 
-  setProvider = (provider: Provider) => {
+  setProvider = async (provider: Provider) => {
     this.web3.setProvider(provider);
+    
+    if(this.web3.currentProvider.enable)
+      try {
+        await this.web3.currentProvider.enable();
+      } catch (e) {
+        console.log(e);
+      }
+    
     this.addressList = this.web3.eth.getAccounts();
   }
   
