@@ -1,13 +1,15 @@
 language: node_js
 node_js:
-- stable
-- '6'
-- '4'
+  - stable
+  - 8
+script:
+  - yarn build
+  - yarn test 
 deploy:
   provider: npm
-  email: ofonsk@gmail.com
+  email: hiro@cehh.io
   api_key:
     secure: OzavJw0ip8kxV1i+MTTKNSxOIqQD9xmDlBCQhxuvAqh8jWIy4J28BSjpohYTzVbQrEBZY9g0FCE6iJ1/gi4NSk6dPle4JNf3n38/a06weoMP/5h/ukSya1TrpeqQyhKB5+7T4IQFTElavAHH67MMTVaSStTL7MZhlMU2QvMwus++F+xP875kuVwfwJQfoceZN4X4YM6D8ulWpMecLouf1n4HOmemtCEbut4tPVQou1x7XWX6VtWc/5RJpeubxUNzrYIoJuX3IkWckRkbOpfwFWO8fkeDN25UH6AWXYAlLERbxb1ovAvvnpOYAgOgTeiYvTlLBaUueSgn37d5nvAaxTK4OP4rE+PFaTFOCNOvwCU5Kn3tXWfYBc04YI9uE4TDRpv+5cBrX4Ki4bAkqlT86C+g84bdfO1UiW3xGBXqCo4Afk5OqzYnr8g5chfwMdp1rzBSflt4Qm43dVs7Iyt+Iyd5RXmctIF13Ktb0FK6v6t5GHnYoweC1t9O8wSDHJg9IOg7UZB1Eg98Ke28yg/vD5JyBEsdmPmdVcNIKPYNFw7zPw5fA0V9qHA/zfN3PuEURX+webV0wfCkPL0dUUOfCyOc8Mox4xfrKOelrm7XaK3VN5XNhe9P+EegE23rGi9AkalU4ku/zzjf4i1+xtCOfgeG56dRlUnUod4ieKkpg88=
+  skip_cleanup: true
   on:
     branch: master
-    tags: true
