@@ -85,7 +85,7 @@ if(isSigner) {
 
 ## Release History
 
-* 0.3.20
+* 0.3.21
     * Include `.enable` calls when possible
 * 0.3.19
     * Add tests 
