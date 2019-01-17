@@ -21,8 +21,8 @@ export class Wallet {
 
   constructor() {
     this.web3 = new Web3(Web3.givenProvider || 'https://mainnet.infura.io/metamask');
-    this.enable();
     this.addressList = this.web3.eth.getAccounts();
+    this.enable();
   }
   
   isAvailable = async (): Promise<boolean> => {
