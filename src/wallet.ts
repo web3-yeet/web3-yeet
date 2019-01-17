@@ -21,6 +21,7 @@ export class Wallet {
 
   constructor() {
     this.web3 = new Web3(Web3.givenProvider || 'https://mainnet.infura.io/metamask');
+    this.enable();
     this.addressList = this.web3.eth.getAccounts();
   }
   
@@ -31,15 +32,7 @@ export class Wallet {
 
   setProvider = async (provider: Provider) => {
     this.web3.setProvider(provider);
-    
-    if(this.web3.currentProvider.enable)
-      try {
-        await this.web3.currentProvider.enable();
-      } catch (e) {
-        console.log(e);
-      }
-    
-    this.addressList = this.web3.eth.getAccounts();
+    await this.enable();
   }
   
   getAddress = async (): Promise<string | undefined> => {
@@ -95,14 +88,18 @@ export class Wallet {
     return this.sendTransaction(rawTx);
   }
 
-  signMessage = async (msg: string): Promise<string | undefined> => {
+  signMessage = async (msg: (string | object)): Promise<string | undefined> => {
     const signer = await this.getAddress().catch((e: Error) => { throw(e) } );
 
     if(typeof signer !== 'string') {
       throw Error("There is no wallet access.");
     }
 
-    return (this.web3.eth.personal.sign(msg, signer as string) as any);
+    const signData = (typeof msg === 'object')
+      ? JSON.stringify(msg)
+      : msg;
+
+    return (this.web3.eth.personal.sign(signData, signer as string) as any);
   }
   
   checkMessage = async (msg: string, signature: string): Promise<boolean> => {
@@ -133,5 +130,17 @@ export class Wallet {
         throw Error(error);
       });
     })
+  }
+
+  private enable = async () => {
+    if(this.web3.currentProvider.enable) {
+      try {
+        await this.web3.currentProvider.enable();
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    this.addressList = this.web3.eth.getAccounts();
   }
 }
