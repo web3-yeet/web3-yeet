@@ -24,8 +24,8 @@ export class Wallet {
     this.addressList = this.web3.eth.getAccounts();
     this.enable();
 
-    if(this.web3.publicConfigStore)
-      this.web3.publicConfigStore.on('update', this.updateAddress);
+    if(typeof ethereum !== 'undefined' && ethereum.publicConfigStore)
+      ethereum.publicConfigStore.on('update', this.updateAddress);
   }
 
   setProvider = async (provider: Provider) => {
