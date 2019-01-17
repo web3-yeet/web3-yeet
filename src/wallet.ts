@@ -23,16 +23,19 @@ export class Wallet {
     this.web3 = new Web3(Web3.givenProvider || 'https://mainnet.infura.io/metamask');
     this.addressList = this.web3.eth.getAccounts();
     this.enable();
-  }
-  
-  isAvailable = async (): Promise<boolean> => {
-    const addressList: string[] = await this.addressList.catch((e: Error) => { throw(e) } );
-    return addressList !== undefined && addressList.length > 0; 
+
+    if(typeof ethereum !== 'undefined' && ethereum.publicConfigStore)
+      ethereum.publicConfigStore.on('update', this.updateAddress);
   }
 
   setProvider = async (provider: Provider) => {
     this.web3.setProvider(provider);
     await this.enable();
+  }
+  
+  isAvailable = async (): Promise<boolean> => {
+    const addressList: string[] = await this.addressList.catch((e: Error) => { throw(e) } );
+    return addressList !== undefined && addressList.length > 0; 
   }
   
   getAddress = async (): Promise<string | undefined> => {
@@ -42,6 +45,11 @@ export class Wallet {
     } else {
       return undefined;
     }
+  }
+  
+  updateAddress = async (update: Object) => {
+    if(((await this.getAddress()) || "").toLowerCase() !== update.selectedAddress.toLowerCase())
+      this.addressList = this.web3.eth.getAccounts();
   }
 
   sendEther = async (address: string, amount: number): Promise<IReceipt> => {

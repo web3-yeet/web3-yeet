@@ -61,6 +61,13 @@ describe('Wallet', function() {
 
     assert.equal(recovered, (await wallet.getAddress()));
   });
+  
+
+  /* ganache does not support publicConfigStore */
+  
+  it.skip('should update the wallet', async () => {
+    /* ganache.selectedAddress(1); */
+  });
 
   after(() => {
     server.close();
