@@ -48,7 +48,7 @@ export class Wallet {
   }
   
   updateAddress = async (update: Object) => {
-    if((await this.getAddress()).toLowerCase() !== update.selectedAddress.toLowerCase())
+    if(((await this.getAddress()) || "").toLowerCase() !== update.selectedAddress.toLowerCase())
       this.addressList = this.web3.eth.getAccounts();
   }
 
