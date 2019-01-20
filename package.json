@@ -8,9 +8,10 @@
     "access": "public"
   },
   "scripts": {
-    "type-check": "tsc",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' --fix",
+    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts'",
     "test": "mocha test",
-    "build": "babel src -d lib --delete-dir-on-start --extensions '.ts'"
+    "travis": "yarn lint && yarn build && yarn test"
   },
   "keywords": [
     "web3",
@@ -43,6 +44,9 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "chai": "^4.2.0",
     "ganache-cli": "^6.2.5",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "tslint": "^5.12.1",
+    "tslint-immutable": "^5.1.0",
+    "typescript": "^3.2.4"
   }
 }

@@ -1,0 +1,18 @@
+{
+  "defaultSeverity": "error",
+    "extends": [
+      "tslint:recommended",
+      "tslint-immutable"
+    ],
+    "jsRules": {},
+    "rules": {
+      "import-spacing": false,
+      "object-literal-sort-keys": false,
+      "readonly-keyword": false,
+      "readonly-array": true,
+      "no-let": true,
+      "no-delete": true,
+      "no-method-signature": true
+    },
+    "rulesDirectory": []
+}
