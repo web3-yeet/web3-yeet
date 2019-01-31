@@ -22,8 +22,14 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime-corejs2": "^7.2.0",
+    "@ledgerhq/hw-app-eth": "^4.35.0",
+    "@ledgerhq/hw-transport-node-hid": "^4.35.0",
+    "@ledgerhq/hw-transport-u2f": "^4.35.0",
+    "@ledgerhq/web3-subprovider": "^4.35.0",
     "@types/bn.js": "^4.11.3",
-    "web3": "^1.0.0-beta.37"
+    "babel-polyfill": "^6.26.0",
+    "web3": "^1.0.0-beta.37",
+    "web3-provider-engine": "^14.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -37,6 +43,9 @@
     "@babel/plugin-transform-typescript": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-typescript": "^7.1.0",
+    "@babel/runtime": "^7.3.1",
+    "@ledgerhq/hw-http-proxy-devserver": "^4.35.0",
+    "@ledgerhq/hw-transport-mocker": "^4.35.0",
     "@types/web3": "^1.0.14",
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-inline-json-import": "^0.3.1",

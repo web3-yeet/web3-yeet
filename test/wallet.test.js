@@ -10,40 +10,66 @@ describe('Wallet', function() {
     server = ganache.server({fork: 'https://mainnet.infura.io/metamask'});
     server.listen(8545, () => {});
   });
+
+  beforeEach(() => {
+    wallet = new web3.Wallet();
+  });
   
+  afterEach(() => {
+    try {
+      wallet.web3.currentProvider.removeAllListeners();
+    } catch (e) {}
+  });
 
   /* sync */
   
   it('should create a new wallet', () => {
-    wallet = new web3.Wallet();
-
     assert.instanceOf(wallet, web3.Wallet);
   });
   
   it('should change the provider', () => {
     assert.doesNotThrow(() => { wallet.setProvider(server.provider) });
   });
-  
 
   /* async */
+  
+  /* Ledger */
+  it('ledger: should check for access', async () => {
+    wallet.setLedger().catch(e => {});
+    const address = await wallet.isAvailable();
 
-  it('should check for access', async () => {
+    assert.isNotOk(false);
+  });
+  
+  it('ledger: should get one address', async () => {
+    wallet.setLedger().catch(e => {});
+    const address = await wallet.getAddress();
+
+    assert.isNotOk(address);
+  });
+
+  /* Provider */
+  it('general: should check for access', async () => {
+    wallet.setProvider(server.provider);
     const address = await wallet.isAvailable();
 
     assert.isBoolean(address);
   });
   
-  it('should get one address', async () => {
+  it('general: should get one address', async () => {
+    wallet.setProvider(server.provider);
     const address = await wallet.getAddress();
 
     assert.isString(address);
   });
   
   it('should send ether', async () => {
+    await wallet.setProvider(server.provider);
     assert.doesNotThrow(async () => { wallet.sendEther(await wallet.getAddress(), 0.1); });
   });
   
   it('should send tokens', async () => {
+    wallet.setProvider(server.provider);
     assert.doesNotThrow(async () => { wallet.sendERC20(await wallet.getAddress(), 1, (new web3.ERC20('0x4f38f4229924bfa28d58eeda496cc85e8016bccc'))); });
   });
   

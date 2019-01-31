@@ -3,12 +3,17 @@
  *
  */
 
-import BN                     from "bn.js";
-import Web3                   from "web3";
-import { Provider }           from "web3/eth/../providers";
-import { TransactionReceipt } from "web3/eth/../types";
-import { Tx }                 from "web3/eth/types";
-import { ERC20 }              from "./erc20";
+import Transport               from "@ledgerhq/hw-transport-node-hid";
+import TransportU2F            from "@ledgerhq/hw-transport-u2f";
+import createLedgerSubprovider from "@ledgerhq/web3-subprovider";
+import BN                      from "bn.js";
+import Web3                    from "web3";
+import ProviderEngine          from "web3-provider-engine";
+import RpcSubprovider          from "web3-provider-engine/subproviders/rpc";
+import { Provider }            from "web3/eth/../providers";
+import { TransactionReceipt }  from "web3/eth/../types";
+import { Tx }                  from "web3/eth/types";
+import { ERC20 }               from "./erc20";
 
 interface IReceipt {
   success: boolean;
@@ -17,28 +22,77 @@ interface IReceipt {
 
 export class Wallet {
   public addressList: Promise<ReadonlyArray<string>>;
+  public publicNode: string;
   public web3: Web3;
 
   constructor() {
-    this.web3 = new Web3(Web3.givenProvider || "https://mainnet.infura.io/metamask");
+    this.publicNode = "https://mainnet.infura.io/metamask";
+    this.web3 = new Web3(Web3.givenProvider || this.publicNode);
     this.addressList = this.web3.eth.getAccounts();
     this.enable();
 
+    // @ts-ignore
     if (typeof ethereum !== "undefined" && ethereum.publicConfigStore) {
+      // @ts-ignore
       ethereum.publicConfigStore.on("update", this.updateAddress);
     }
   }
 
-  public setProvider = async (provider: Provider) => {
+  public setLedger = async (): Promise<Wallet> => {
+    const engine = this.ledgerWithRPC(this.publicNode);
+
+    if (typeof engine !== "undefined") {
+      const web3ledger = new Web3(engine);
+
+      const addressList = await Promise.race([
+        web3ledger.eth.getAccounts(),
+        new Promise((resolve) => setTimeout(() => resolve(undefined), 1000)),
+      ]).catch((e: Error) => { throw(e); });
+
+      if (typeof addressList === "undefined") {
+        // @ts-ignore
+        web3ledger = null;
+        throw new Error("Could not access the ledger wallet. Try again later.");
+      } else {
+        this.web3.setProvider(engine);
+      }
+    }
+
+    return this;
+  }
+
+  public ledgerLogout = () => {
+    // @ts-ignore
+    this.web3 = null;
+    this.web3 = new Web3(Web3.givenProvider || this.publicNode);
+
+    return this;
+  }
+
+  public setProvider = async (provider: Provider): Promise<Wallet> => {
     this.web3.setProvider(provider);
     await this.enable();
+
+    return this;
   }
 
+  /**
+   * Checks if the wallet if available for access
+   *
+   * @returns {boolean} Returns if the addresslist exists and there is at least 1 account available
+   */
   public isAvailable = async (): Promise<boolean> => {
-    const addressList: ReadonlyArray<string> = await this.addressList.catch((e: Error) => { throw(e); } );
-    return addressList !== undefined && addressList.length > 0;
+    const addressList: ReadonlyArray<string> = await this.addressList.catch((e: Error) => { throw(e); });
+
+    // @ts-ignore
+    return typeof addressList !== "undefined" && addressList.length > 0;
   }
 
+  /**
+   * Get the first available unlocked wallet address
+   *
+   * @returns {string} The address that will execute calls
+   */
   public getAddress = async (): Promise<string | undefined> => {
     if (await this.isAvailable()) {
       const addressList: ReadonlyArray<string> = await this.addressList.catch((e: Error) => { throw(e); } );
@@ -48,12 +102,26 @@ export class Wallet {
     }
   }
 
+  /**
+   * Update the addresslist after the publicConfigStore emits the update event
+   *
+   * @param {object} update The object including the network id and address
+   */
   public updateAddress = async (update: object) => {
+    // @ts-ignore
     if (((await this.getAddress()) || "").toLowerCase() !== update.selectedAddress.toLowerCase()) {
       this.addressList = this.web3.eth.getAccounts();
     }
   }
 
+  /**
+   * Send ether to an address
+   *
+   * @param {string} address The recipient's address
+   * @param {number} amount The amount to send, in ether
+   *
+   * @return {Promise} the transaction receipt promise
+   */
   public sendEther = async (address: string, amount: number): Promise<IReceipt> => {
     const sender = await this.getAddress().catch((e: Error) => { throw(e); } );
 
@@ -114,6 +182,7 @@ export class Wallet {
       ? JSON.stringify(msg)
       : msg;
 
+    // @ts-ignore
     return (this.web3.eth.personal.sign(signData, signer as string) as any);
   }
 
@@ -147,9 +216,32 @@ export class Wallet {
     });
   }
 
+  private ledgerWithRPC = (rpcUrl: string) => {
+    const engine = new ProviderEngine();
+    const getTransport = () => typeof window !== "undefined" ? TransportU2F.create() : Transport.create();
+
+    try {
+      const ledger = createLedgerSubprovider(getTransport, {
+        accountsLength: 1,
+      });
+      engine.addProvider(ledger);
+      engine.addProvider(new RpcSubprovider({ rpcUrl }));
+
+      engine.start();
+
+      return engine;
+    } catch (e) {
+      throw(e);
+      return undefined;
+    }
+
+  }
+
   private enable = async () => {
+    // @ts-ignore
     if (this.web3.currentProvider.enable) {
       try {
+        // @ts-ignore
         await this.web3.currentProvider.enable();
       } catch (e) {
         throw (e);
