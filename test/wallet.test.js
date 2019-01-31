@@ -18,6 +18,7 @@ describe('Wallet', function() {
   afterEach(() => {
     try {
       wallet.web3.currentProvider.removeAllListeners();
+      wallet.web3.currentProvider.stop();
     } catch (e) {}
   });
 
@@ -34,26 +35,30 @@ describe('Wallet', function() {
   /* async */
   
   /* Ledger */
-  it('ledger: should check for access', async () => {
-    wallet.setLedger().catch(e => {});
-    const address = await wallet.isAvailable();
+  describe('with Ledger', () => {
+    it('should check for access', async () => {
+      this.timeout(0);
+      wallet.setLedger().catch(e => {console.error});
+      const status = await wallet.isAvailable();
 
-    assert.isNotOk(false);
-  });
-  
-  it('ledger: should get one address', async () => {
-    wallet.setLedger().catch(e => {});
-    const address = await wallet.getAddress();
+      assert.isNotOk(status);
+    });
+    
+    it('should get one address', async () => {
+      this.timeout(0);
+      wallet.setLedger().catch(e => {console.error});
+      const address = await wallet.getAddress();
 
-    assert.isNotOk(address);
+      assert.isNotOk(address);
+    });
   });
 
   /* Provider */
   it('general: should check for access', async () => {
     wallet.setProvider(server.provider);
-    const address = await wallet.isAvailable();
+    const status = await wallet.isAvailable();
 
-    assert.isBoolean(address);
+    assert.isBoolean(status);
   });
   
   it('general: should get one address', async () => {

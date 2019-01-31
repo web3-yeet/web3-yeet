@@ -46,12 +46,13 @@ export class Wallet {
 
       const addressList = await Promise.race([
         web3ledger.eth.getAccounts(),
-        new Promise((resolve) => setTimeout(() => resolve(undefined), 1000)),
+        new Promise((resolve) => setTimeout(resolve, 3000, undefined)),
       ]).catch((e: Error) => { throw(e); });
 
       if (typeof addressList === "undefined") {
         // @ts-ignore
         web3ledger = null;
+        engine.stop();
         throw new Error("Could not access the ledger wallet. Try again later.");
       } else {
         this.web3.setProvider(engine);
@@ -226,8 +227,6 @@ export class Wallet {
       });
       engine.addProvider(ledger);
       engine.addProvider(new RpcSubprovider({ rpcUrl }));
-
-      engine.start();
 
       return engine;
     } catch (e) {
