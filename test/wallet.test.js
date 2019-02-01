@@ -5,9 +5,10 @@ const ganache = require("ganache-cli");
 
 describe('Wallet', function() {
   let server, wallet, signature;
+  const infura = 'https://mainnet.infura.io/metamask';
   
   before(async () => {
-    server = ganache.server({fork: 'https://mainnet.infura.io/metamask'});
+    server = ganache.server({fork: infura});
     server.listen(8545, () => {});
   });
 
@@ -33,23 +34,38 @@ describe('Wallet', function() {
   });
 
   /* async */
-  
+
+  /* Infura */
+  describe('with Infura', () => {
+    it('general: should get undefined address', async () => {
+      const address = await wallet.getAddress();
+      assert.isUndefined(address);
+    });
+  });
+
   /* Ledger */
   describe('with Ledger', () => {
     it('should check for access', async () => {
-      this.timeout(0);
-      wallet.setLedger().catch(e => {console.error});
+      await wallet.setLedger().catch(console.error);
       const status = await wallet.isAvailable();
+      wallet.ledgerLogout();
 
       assert.isNotOk(status);
-    });
+    }).timeout(0);
     
     it('should get one address', async () => {
-      this.timeout(0);
-      wallet.setLedger().catch(e => {console.error});
+      await wallet.setLedger().catch(console.error);
       const address = await wallet.getAddress();
+      wallet.ledgerLogout();
 
       assert.isNotOk(address);
+    }).timeout(0);
+  
+    afterEach(() => {
+      try {
+        wallet.web3.currentProvider.removeAllListeners();
+        wallet.web3.currentProvider.stop();
+      } catch (e) {}
     });
   });
 

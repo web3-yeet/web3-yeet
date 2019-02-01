@@ -3,7 +3,7 @@
  *
  */
 
-import Transport               from "@ledgerhq/hw-transport-node-hid";
+// import Transport               from "@ledgerhq/hw-transport-node-hid";
 import TransportU2F            from "@ledgerhq/hw-transport-u2f";
 import createLedgerSubprovider from "@ledgerhq/web3-subprovider";
 import BN                      from "bn.js";
@@ -39,19 +39,18 @@ export class Wallet {
   }
 
   public setLedger = async (): Promise<Wallet> => {
-    const engine = this.ledgerWithRPC(this.publicNode);
+    const engine = this.ledgerWithRPC(this.publicNode).start();
 
     if (typeof engine !== "undefined") {
       const web3ledger = new Web3(engine);
 
       const addressList = await Promise.race([
         web3ledger.eth.getAccounts(),
-        new Promise((resolve) => setTimeout(resolve, 3000, undefined)),
+        new Promise((resolve) => setTimeout(resolve, 30000, undefined)),
       ]).catch((e: Error) => { throw(e); });
 
       if (typeof addressList === "undefined") {
         // @ts-ignore
-        web3ledger = null;
         engine.stop();
         throw new Error("Could not access the ledger wallet. Try again later.");
       } else {
@@ -63,10 +62,13 @@ export class Wallet {
   }
 
   public ledgerLogout = () => {
-    // @ts-ignore
-    this.web3 = null;
-    this.web3 = new Web3(Web3.givenProvider || this.publicNode);
-
+    if (this.web3.currentProvider.stop) {
+      // @ts-ignore
+      this.web3.currentProvider.stop();
+      // @ts-ignore
+      this.web3 = null;
+      this.web3 = new Web3(Web3.givenProvider || this.publicNode);
+    }
     return this;
   }
 
@@ -223,10 +225,10 @@ export class Wallet {
 
     try {
       const ledger = createLedgerSubprovider(getTransport, {
-        accountsLength: 1,
+        accountsLength: 2,
       });
-      engine.addProvider(ledger);
       engine.addProvider(new RpcSubprovider({ rpcUrl }));
+      engine.addProvider(ledger);
 
       return engine;
     } catch (e) {
