@@ -24,11 +24,13 @@ export class Wallet {
   public addressList: Promise<ReadonlyArray<string>>;
   public publicNode: string;
   public web3: Web3;
+  public ledgerAccess: boolean;
 
   constructor() {
     this.publicNode = "https://mainnet.infura.io/metamask";
     this.web3 = new Web3(Web3.givenProvider || this.publicNode);
     this.addressList = this.web3.eth.getAccounts();
+    this.ledgerAccess = false;
     this.enable();
 
     // @ts-ignore
@@ -55,6 +57,8 @@ export class Wallet {
         throw new Error("Could not access the ledger wallet. Try again later.");
       } else {
         this.web3.setProvider(engine);
+        this.addressList = this.web3.eth.getAccounts();
+        this.ledgerAccess = true;
       }
     }
 
@@ -62,11 +66,11 @@ export class Wallet {
   }
 
   public ledgerLogout = () => {
+    // @ts-ignore
     if (this.web3.currentProvider.stop) {
       // @ts-ignore
       this.web3.currentProvider.stop();
-      // @ts-ignore
-      this.web3 = null;
+      this.ledgerAccess = false;
       this.web3 = new Web3(Web3.givenProvider || this.publicNode);
     }
     return this;
@@ -221,7 +225,7 @@ export class Wallet {
 
   private ledgerWithRPC = (rpcUrl: string) => {
     const engine = new ProviderEngine();
-    const getTransport = () => typeof window !== "undefined" ? TransportU2F.create() : Transport.create();
+    const getTransport = () => typeof window !== "undefined" ? TransportU2F.create() : undefined;
 
     try {
       const ledger = createLedgerSubprovider(getTransport, {
