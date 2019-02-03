@@ -12,14 +12,19 @@ Web3js is a very powerful package, but as it stands, it is difficult to use. Web
 
 Check the functions at https://web3-yeet.github.io/.
 
-The buttons simply call:
+The buttons (basically) call:
 ```js
-  sendCehh = () => {
-    this.wallet.sendERC20(this.bag, 20, this.token); 
+  sendCehh = async () => {
+    await this.wallet.sendERC20(this.bag, 20, this.token); 
   }
 
-  sendEth = () => {
-    this.wallet.sendEther(this.bag, 0.024); /* Donations appreciated  */
+  sendEth = async () => {
+    await this.wallet.sendEther(this.bag, 0.024); /* Donations appreciated  */
+  }
+  
+  accessLedger = async () => {
+    await this.wallet.setLedger();
+    this.setState({ledgerAccess: true});
   }
 
   sign = async () => {
@@ -32,6 +37,15 @@ The buttons simply call:
     this.setState({isYou: isYou});
   }
 ```
+
+Listen to account changes!
+```js
+  this.wallet.on('accountChange', (account) => {
+    this.setState({account: accounts});
+  });
+```
+
+Note: Remember to handle exceptions and give feedback to the user!
 
 ## Installation
 
@@ -71,6 +85,12 @@ const msg = 'check-in id: 41923';
 const signature = await userWallet.signMessage(msg).catch((error) => { /* error handling */ });
 ```
 
+### Switch the wallet to 
+```js
+const msg = 'check-in id: 41923';
+const signature = await userWallet.signMessage(msg).catch((error) => { /* error handling */ });
+```
+
 ### Check if the user is the original signer of a message
 ```js
 const msg = 'check-in id: 41923';
@@ -84,6 +104,9 @@ if(isSigner) {
 ```
 
 ## Release History
+
+* 0.4.0
+    * Add event-based address change and Ledger access
 
 * 0.3.21
     * Include `.enable` calls when possible

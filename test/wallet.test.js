@@ -23,6 +23,10 @@ describe('Wallet', function() {
     } catch (e) {}
   });
 
+  after(() => {
+    server.close();
+  });
+
   /* sync */
   
   it('should create a new wallet', () => {
@@ -45,7 +49,7 @@ describe('Wallet', function() {
 
   /* Ledger */
   describe('with Ledger', () => {
-    it('should check for access', async () => {
+    it.skip('should check for access', async () => {
       await wallet.setLedger().catch(console.error);
       const status = await wallet.isAvailable();
       wallet.ledgerLogout();
@@ -53,7 +57,7 @@ describe('Wallet', function() {
       assert.isNotOk(status);
     }).timeout(0);
     
-    it('should get one address', async () => {
+    it.skip('should get one address', async () => {
       await wallet.setLedger().catch(console.error);
       const address = await wallet.getAddress();
       wallet.ledgerLogout();
@@ -114,9 +118,5 @@ describe('Wallet', function() {
   
   it.skip('should update the wallet', async () => {
     /* ganache.selectedAddress(1); */
-  });
-
-  after(() => {
-    server.close();
   });
 });

@@ -4,11 +4,6 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    ["@babel/plugin-transform-arrow-functions", { "spec": false }],
-    ["@babel/plugin-transform-runtime", {
-      "corejs": 2,
-      "regenerator": true
-    }],
     ["@babel/plugin-transform-typescript"],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
     ["@babel/plugin-transform-modules-commonjs", {
